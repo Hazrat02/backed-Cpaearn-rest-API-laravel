@@ -96,4 +96,12 @@ class AuthController extends Controller
                 'type' => 'bearer',
             ]
         ]);}
+    public function me()
+    {
+        // $authUser=User::where('id',auth()->user()->id)->get();
+        return response()->json([
+            
+            'authUser' => Auth::user(),
+  
+        ]);}
 }

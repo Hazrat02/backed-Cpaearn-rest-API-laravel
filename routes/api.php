@@ -37,7 +37,7 @@ Route::group([
     Route::post('register', [AuthController::class,'register'])->name('register');
     Route::post('logout', [AuthController::class,'logout'])->name('logout');
     Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::post('me', [AuthController::class,'me']);
 
 });
 
@@ -49,6 +49,9 @@ Route::group([
 
 ], function ($router) {
     Route::get('payment', [FrontendController::class,'payment_method'])->name('payment');
+    Route::post('deposit', [FrontendController::class,'deposit']);
+    Route::get('transaction', [FrontendController::class,'transaction']);
+    Route::get('ask', [FrontendController::class,'ask']);
   
 
 });
