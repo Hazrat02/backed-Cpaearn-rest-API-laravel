@@ -41,7 +41,7 @@ class FrontendController extends Controller
            
         ]);
 
-    
+        $method=payment::where('id',$request->method)->get()->first();
         $deposit = transaction::create([
             'status' =>'pending',
             'user_id' => auth()->user()->id,
@@ -56,12 +56,11 @@ class FrontendController extends Controller
 
 
         ]);
-  
         return response()->json([
             'message'=>'Your deposit request done.Wait few moment adding balence',
             'status' => $request->status,
             'user_id' => auth()->user()->id,
-            'method' => $request->method,
+            'method' => $method,
             'type' => $request->type,
 
             'network' => $request->network,
@@ -69,7 +68,7 @@ class FrontendController extends Controller
             'trxid' => $request->trxid,
 
             'address' => $request->address,
-
+            'created_at' => now(),
 
         ]);
     }
