@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\payment;
 use App\Models\transaction;
 use App\Models\ask;
+use App\Models\vip;
 use PhpParser\Node\Stmt\Return_;
 
 class FrontendController extends Controller
@@ -88,6 +89,15 @@ class FrontendController extends Controller
        
         return response()->json([
             'ask'=>$ask,
+
+        ]);
+    }
+    public function vip(Request $request)
+    {
+        $vip=vip::with('vipunlock')->get();
+       
+        return response()->json([
+            'vip'=>$vip,
 
         ]);
     }

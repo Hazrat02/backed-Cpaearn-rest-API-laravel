@@ -52,6 +52,7 @@ Route::group([
     Route::post('deposit', [FrontendController::class,'deposit']);
     Route::get('transaction', [FrontendController::class,'transaction']);
     Route::get('ask', [FrontendController::class,'ask']);
+    Route::get('vip', [FrontendController::class,'vip']);
   
 
 });
