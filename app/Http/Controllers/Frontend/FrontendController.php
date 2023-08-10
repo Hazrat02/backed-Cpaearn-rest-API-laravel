@@ -22,7 +22,7 @@ class FrontendController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','ask','vip']]);
     }
     public function payment_method()
     {
@@ -83,21 +83,25 @@ class FrontendController extends Controller
 
         ]);
     }
-    public function ask(Request $request)
-    {
-        $ask=ask::orderBy('id', 'desc')->get();
-       
-        return response()->json([
-            'ask'=>$ask,
-
-        ]);
-    }
+    
     public function vip(Request $request)
     {
         $vip=vip::with('vipunlock')->get();
        
         return response()->json([
             'vip'=>$vip,
+
+        ]);
+    }
+
+    
+
+    public function ask()
+    {
+        $ask=ask::orderBy('id', 'desc')->get();
+       
+        return response()->json([
+            'ask'=>$ask,
 
         ]);
     }

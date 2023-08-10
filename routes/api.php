@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Frontend\userController;
+use App\Http\Controllers\Frontend\workController;
 use App\Models\User;
 /*
 |--------------------------------------------------------------------------
@@ -16,14 +18,6 @@ use App\Models\User;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-// Route::get('/alluser', function () {
-
-//     $user=User::get();
-//     return response()->json($user);
-// });
 
 Route::group([
 
@@ -48,11 +42,13 @@ Route::group([
    
 
 ], function ($router) {
+    Route::get('ask', [FrontendController::class,'ask']);
     Route::get('payment', [FrontendController::class,'payment_method'])->name('payment');
     Route::post('deposit', [FrontendController::class,'deposit']);
     Route::get('transaction', [FrontendController::class,'transaction']);
-    Route::get('ask', [FrontendController::class,'ask']);
     Route::get('vip', [FrontendController::class,'vip']);
+    Route::get('work', [workController::class,'work']);
+    Route::post('useredit', [userController::class,'userEdit']);
   
 
 });

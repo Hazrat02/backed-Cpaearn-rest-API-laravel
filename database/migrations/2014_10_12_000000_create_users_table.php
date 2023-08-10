@@ -19,8 +19,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('profile')->nullable();
             $table->string('vip')->nullable();
-            $table->integer('main_balance')->nullable();
-            $table->integer('frozen_balance')->nullable();
+            $table->string('main_balance')->default(0);
+            $table->string('frozen_balance')->default(0);
+            $table->string('my_reffer')->nullable()->unique();
+            $table->string('use_reffer')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

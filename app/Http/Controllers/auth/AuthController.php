@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Models\ask;
 use App\Models\User;
 use App\Models\payment;
 
@@ -17,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('auth:api', ['except' => ['login','register','ask']]);
     }
 
     public function login(Request $request)
@@ -104,4 +105,5 @@ class AuthController extends Controller
             'authUser' => Auth::user(),
   
         ]);}
+
 }
