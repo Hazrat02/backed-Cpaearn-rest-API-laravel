@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ask;
 use App\Models\User;
 use App\Models\payment;
+use App\Mail\forgetEmail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -18,7 +20,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register','ask']]);
+        $this->middleware('auth:api', ['except' => ['login','register','ask','sendForgetEmail','forget']]);
     }
 
     public function login(Request $request)
@@ -27,9 +29,10 @@ class AuthController extends Controller
         // $password = Hash::make($request->password);
         // dd($password);
         $request->validate([
-            'email' => 'required|string|email',
+            'email' => 'required|string|email|max:255|exists:users',
             'password' => 'required|string',
         ]);
+        
         $credentials = $request->only('email', 'password');
         // $user=User::where('email',$request->email)->get()->first();
 
@@ -37,7 +40,7 @@ class AuthController extends Controller
         if (!$token) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Unauthorized',
+                'message' => 'Your email or password wrong!',
             ], 401);
         }
 
@@ -57,7 +60,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = User::create([
@@ -105,5 +108,54 @@ class AuthController extends Controller
             'authUser' => Auth::user(),
   
         ]);}
+
+
+        
+    public function sendForgetEmail(Request $request)
+    {
+        $request->validate([
+            
+            'email' => 'required|string|email|max:255|exists:users',
+            
+        ]);
+        $forgetCode = rand(10000, 99999); // Generate a random forget code
+        $title='Welcome to Our Cpaearn!';
+        $btn='Wait Few Days';
+        Mail::to( $request->email)
+            ->send(new forgetEmail($forgetCode,$title,$btn));
+            return response()->json([
+                'code' =>$forgetCode,
+               
+            ]);
+        
+    }
+
+
+    public function forget(Request $request)
+    {
+       
+            $request->validate([
+                'email' => 'required|string|email|max:255|exists:users',
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+    
+            $password= Hash::make($request->password);
+            
+        
+
+
+        $response = User::where('email', $request->email)->update([
+            
+            'password'=>$password,
+           
+            
+        ]);
+
+
+        return response()->json([
+            'message'=>'Password Updated'
+        ]);
+    }
+
 
 }

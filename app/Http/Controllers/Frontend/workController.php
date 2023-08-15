@@ -12,6 +12,7 @@ use App\Models\transaction;
 use App\Models\ask;
 use App\Models\vip;
 use App\Models\work;
+use App\Models\workdetails;
 use PhpParser\Node\Stmt\Return_;
 
 class workController extends Controller
@@ -23,40 +24,46 @@ class workController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register','ask','work']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'ask', 'work']]);
     }
     public function work(Request $request)
     {
-        // $user=User::where('id',auth()->user()->id)->get()->first();
-       $work = work::get();
-    // $data = [
-    //     'name' => 'Read News',
-    //     'vip_id' => [
-    //         ['id' => 1],
-    //         ['id' => 2],
-    //         ['id' => 3],
-    //     ],
-    //     'dicribtion' => 'You need connect vpn us/uk server without your account will ban',
-    //     'earn' => 0.04,
-    //     'icon' => 'bi-newspaper',
-    //     'component' => 'news',
-    // ];
 
-  
+        $work = work::get();
 
 
-    // $work=work::create($data);
-    
-
-       
         return response()->json([
-            
+
             'work' => $work,
-            
+
+        ]);
+    }
+    public function workstor(Request $request)
+    {
+
+        $request->validate([
+       
+            'work_id' => 'required',
+            'earn' => 'required',
+           
+        ]);
+        $work = workdetails::create([
+            'status' => 'pending',
+            'work_id' => $request->work_id,
+            'user_id' => $request->user_id,
+            'earn' => $request->earn,
+
+
+
         ]);
 
-    }
 
-    
- 
+
+
+        return response()->json([
+
+            'work' => $work,
+
+        ]);
+    }
 }

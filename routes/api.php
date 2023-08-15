@@ -28,10 +28,12 @@ Route::group([
 ], function ($router) {
 
     Route::post('login', [AuthController::class,'login'])->name('login');
+    Route::post('forgetcode', [AuthController::class,'sendForgetEmail'])->name('sendForgetEmail');
     Route::post('register', [AuthController::class,'register'])->name('register');
     Route::post('logout', [AuthController::class,'logout'])->name('logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', [AuthController::class,'me']);
+    Route::post('forget', [AuthController::class,'forget']);
 
 });
 
@@ -48,6 +50,7 @@ Route::group([
     Route::get('transaction', [FrontendController::class,'transaction']);
     Route::get('vip', [FrontendController::class,'vip']);
     Route::get('work', [workController::class,'work']);
+    Route::post('work.store', [workController::class,'workstor']);
     Route::post('useredit', [userController::class,'userEdit']);
   
 
