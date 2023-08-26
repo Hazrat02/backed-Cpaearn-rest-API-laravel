@@ -8,7 +8,7 @@
         <div>
             <form action="{{route('logout')}}" method="POST"  >
                 @csrf
-       
+       gfdd
             <input type="submit" value="">
             </form>
         </div>
