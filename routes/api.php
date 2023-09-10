@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\admin\adminController;
 use App\Http\Controllers\Frontend\userController;
 use App\Http\Controllers\Frontend\workController;
 use App\Models\User;
@@ -52,6 +53,9 @@ Route::group([
     Route::get('work', [workController::class,'work']);
     Route::post('work.store', [workController::class,'workstor']);
     Route::post('useredit', [userController::class,'userEdit']);
+    Route::post('payment.store', [adminController::class,'payment_method_create']);
+    Route::post('vip.store', [adminController::class,'vip_store']);
+    Route::post('work.create', [adminController::class,'work_store']);
   
 
 });

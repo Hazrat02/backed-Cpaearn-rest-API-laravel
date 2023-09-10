@@ -14,7 +14,8 @@ class vip extends Model
         'description',
         'price',
         'task',
-        'duration'
+        'duration',
+        'icon'
     ];
     public function vipunlock(): HasMany
     {
