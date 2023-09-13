@@ -56,6 +56,18 @@ Route::group([
     Route::post('payment.store', [adminController::class,'payment_method_create']);
     Route::post('vip.store', [adminController::class,'vip_store']);
     Route::post('work.create', [adminController::class,'work_store']);
+    Route::post('ask.store', [adminController::class,'ask_store']);
+    Route::get('all.user', [adminController::class,'all_user']);
+    Route::get('user.delete/{id}', [adminController::class,'user_delete']);
+    Route::get('vip.delete/{id}', [adminController::class,'vip_delete']);
+    Route::get('work.delete/{id}', [adminController::class,'work_delete']);
+    Route::get('ask.delete/{id}', [adminController::class,'ask_delete']);
+    Route::get('payment.delete/{id}', [adminController::class,'payment_delete']);
+    Route::get('vip.edit/{id}', [adminController::class,'vip_edit']);
+    Route::get('work.edit/{id}', [adminController::class,'work_edit']);
+    Route::get('ask.edit/{id}', [adminController::class,'ask_edit']);
+    Route::get('payment.edit/{id}', [adminController::class,'payment_edit']);
+    Route::get('transaction.edit/{id}', [adminController::class,'transaction_edit']);
   
 
 });

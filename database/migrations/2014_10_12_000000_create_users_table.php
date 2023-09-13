@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('profile')->nullable();
             $table->string('vip')->nullable();
+            $table->string('role')->default(1);
             $table->string('main_balance')->default(0);
             $table->string('frozen_balance')->default(0);
             $table->string('my_reffer')->nullable()->unique();

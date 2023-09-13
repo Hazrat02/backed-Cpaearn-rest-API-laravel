@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('component')->nullable();
             $table->json('vip_id')->nullable();
-            $table->string('dicribtion')->nullable();
+            $table->string('description')->nullable();
             $table->string('earn')->nullable();
             $table->string('icon')->nullable();
             

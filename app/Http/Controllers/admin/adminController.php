@@ -72,12 +72,11 @@ class adminController extends Controller
     }
     public function vip_store(Request $request)
     {
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|string|max:255',
             'task' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
             
            
         ]);
@@ -119,7 +118,7 @@ class adminController extends Controller
             
            
         ]);
-        $vip_id='';
+        $vip_id='4';
         if (auth()->user()->role === '0') {
            
         $payment = work::create([
@@ -147,75 +146,233 @@ class adminController extends Controller
         }
        
     }
-    public function deposit(Request $request)
+    public function ask_store(Request $request)
     {
-        $request->validate([
        
-            'price' => 'required',
+        $request->validate([
+            'ask' => 'required|string|max:255',
+            'ans' => 'required|string|max:255',
+
+            
            
         ]);
-
-        $method=payment::where('id',$request->method)->get()->first();
-        $deposit = transaction::create([
-            'status' =>'pending',
-            'user_id' => auth()->user()->id,
-            'method' => $request->method,
-            'type' => $request->type,
-
-            'network' => $request->network,
-            'price' => $request->price,
-            'trxid' => $request->trxid,
-
-            'address' => $request->address,
-
-
-        ]);
-        return response()->json([
-            'message'=>'Your deposit request done.Wait few moment adding balence',
-            'status' => $request->status,
-            'user_id' => auth()->user()->id,
-            'method' => $method,
-            'type' => $request->type,
-
-            'network' => $request->network,
-            'price' => $request->price,
-            'trxid' => $request->trxid,
-
-            'address' => $request->address,
-            'created_at' => now(),
-
-        ]);
-    }
-    public function transaction(Request $request)
-    {
-        $allTransaction=transaction::orderBy('id', 'desc')->get();
-        $authTransaction = transaction::where('user_id',auth()->user()->id)->with('method')->orderBy('id', 'desc')->get();
-        return response()->json([
-            'allTransaction'=>$allTransaction,
-            'authTransaction'=>$authTransaction
-
-        ]);
-    }
-    
-    public function vip(Request $request)
-    {
-        $vip=vip::with('vipunlock')->get();
        
-        return response()->json([
-            'vip'=>$vip,
-
+        if (auth()->user()->role === '0') {
+           
+        $ask = ask::create([
+            'ask' => $request->ask,
+            'ans' => $request->ans,
+            
+         
+            
         ]);
-    }
+        
 
-    
-
-    public function ask()
-    {
-        $ask=ask::orderBy('id', 'desc')->get();
-       
         return response()->json([
+            'status' => 'success',
             'ask'=>$ask,
+            'message' => 'Ask created successfully',
+           
+        ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'error' => 'Sorry!You are not admin',
+               
+            ]);
+        }
+       
+    }
+    public function all_user()
+    {
+        $alluser=User::get();
+        return response()->json([
+            'alluser'=>$alluser,
 
         ]);
     }
+    public function user_delete(Request $request)
+    {
+        $id=$request->id;
+        $res = User::find($id)->delete();
+     
+        return response()->json([
+            'message'=>'Delete done!',
+          
+
+        ]);
+    }
+    public function vip_delete(Request $request)
+    {
+        $id=$request->id;
+        $res = vip::find($id)->delete();
+     
+        return response()->json([
+            'message'=>'Vip delete done!',
+          
+
+        ]);
+    }
+    public function payment_delete(Request $request)
+    {
+        $id=$request->id;
+        $res = payment::find($id)->delete();
+     
+        return response()->json([
+            'message'=>'Payment method delete done!',
+          
+
+        ]);
+    }
+    public function ask_delete(Request $request)
+    {
+        $id=$request->id;
+        $res = ask::find($id)->delete();
+     
+        return response()->json([
+            'message'=>'Ask delete done!',
+          
+
+        ]);
+    }
+    public function work_delete(Request $request)
+    {
+        $id=$request->id;
+        $res = work::find($id)->delete();
+     
+        return response()->json([
+            'message'=>'Work delete done!',
+          
+
+        ]);
+    }
+    
+    public function vip_edit(Request $request)
+    {
+        $id=$request->id;
+        
+        $vip = vip::find($id);
+        // dd($user);
+        $vip->update(
+            [
+                'name' => $request->name,
+                'description' => $request->description,
+                'price' => $request->price,
+                'task' => $request->task,
+                'duration' => $request->duration,
+               'icon'=>$request->icon,
+
+            ]
+        );
+     
+        return response()->json([
+            'message'=>'Vip update done!',
+            'vip'=>$vip
+
+        ]);
+    }
+    public function work_edit(Request $request)
+    {
+        $id=$request->id;
+        
+        $work = work::find($id);
+        // dd($user);
+        $work->update(
+            [
+                'name' => $request->name,
+                'description' => $request->description,
+                'vip_id' => $vip_id,
+                'icon' => $request->icon,
+                'earn' => $request->earn,
+             
+
+            ]
+        );
+     
+        return response()->json([
+            'message'=>'Work update done!',
+            'work'=>$work
+
+        ]);
+    }
+    
+    public function ask_edit(Request $request)
+    {
+        $id=$request->id;
+        
+        $ask = ask::find($id);
+        // dd($user);
+        $ask->update(
+            [
+                'name' => $request->name,
+                'description' => $request->description,
+                'vip_id' => $vip_id,
+                'icon' => $request->icon,
+                'earn' => $request->earn,
+             
+
+            ]
+        );
+     
+        return response()->json([
+            'message'=>'Ask update done!',
+            'ask'=>$ask
+
+        ]);
+    }
+    
+    public function payment_edit(Request $request)
+    {
+        $id=$request->id;
+        
+        $payment = payment::find($id);
+        // dd($user);
+        $payment->update(
+            [
+                'name' => $request->name,
+                'description' => $request->description,
+                'vip_id' => $vip_id,
+                'icon' => $request->icon,
+                'earn' => $request->earn,
+             
+
+            ]
+        );
+     
+        return response()->json([
+            'message'=>'Payment update done!',
+            'payment'=>$payment
+
+        ]);
+    }
+    public function transaction_edit(Request $request)
+    {
+        $id=$request->id;
+        
+        $transaction = transaction::find($id);
+        // dd($user);
+        $transaction->update(
+            [
+                'status' =>'pending',
+                'user_id' => auth()->user()->id,
+                'method' => $request->method,
+                'type' => $request->type,
+    
+                'network' => $request->network,
+                'price' => $request->price,
+                'trxid' => $request->trxid,
+    
+                'address' => $request->address,
+
+            ]
+        );
+     
+        return response()->json([
+            'message'=>'Transaction update done!',
+            'transaction'=>$transaction
+
+        ]);
+    }
+    
+    
 }

@@ -28,7 +28,7 @@ class work extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name',
         'vip_id',
-        'dicribtion',
+        'description',
         'earn',
         'icon'
 
