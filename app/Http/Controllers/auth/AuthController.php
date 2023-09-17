@@ -113,18 +113,30 @@ class AuthController extends Controller
         
     public function sendForgetEmail(Request $request)
     {
-        $request->validate([
+        // if($request->type=='register'){
+        //     $request->validate([
             
-            'email' => 'required|string|email|max:255|exists:users',
+        //         'email' => 'required|string|email|max:255',
+                
+        //     ]);
+        // }
+        // if($request->type=='forget'){
+        //     $request->validate([
             
-        ]);
+        //         'email' => 'required|string|email|max:255|exists:users',
+                
+        //     ]);
+        // }
+        
         $forgetCode = rand(10000, 99999); // Generate a random forget code
         $title='Welcome to Our Cpaearn!';
         $btn='Wait Few Days';
-        Mail::to( $request->email)
-            ->send(new forgetEmail($forgetCode,$title,$btn));
+        $sub=$request->sub;
+        Mail::to($request->email)
+            ->send(new forgetEmail($forgetCode,$title,$btn,$sub));
             return response()->json([
                 'code' =>$forgetCode,
+                'email' =>$request->email,
                
             ]);
         

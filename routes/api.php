@@ -55,19 +55,21 @@ Route::group([
     Route::post('useredit', [userController::class,'userEdit']);
     Route::post('payment.store', [adminController::class,'payment_method_create']);
     Route::post('vip.store', [adminController::class,'vip_store']);
+    Route::post('vipunlock.store', [adminController::class,'vipunlock_store']);
     Route::post('work.create', [adminController::class,'work_store']);
     Route::post('ask.store', [adminController::class,'ask_store']);
     Route::get('all.user', [adminController::class,'all_user']);
     Route::get('user.delete/{id}', [adminController::class,'user_delete']);
     Route::delete('vip/delete/{id}', [adminController::class,'vip_delete']);
-    Route::get('work.delete/{id}', [adminController::class,'work_delete']);
-    Route::get('ask.delete/{id}', [adminController::class,'ask_delete']);
-    Route::get('payment.delete/{id}', [adminController::class,'payment_delete']);
-    Route::get('vip.edit/{id}', [adminController::class,'vip_edit']);
-    Route::get('work.edit/{id}', [adminController::class,'work_edit']);
-    Route::get('ask.edit/{id}', [adminController::class,'ask_edit']);
-    Route::get('payment.edit/{id}', [adminController::class,'payment_edit']);
-    Route::get('transaction.edit/{id}', [adminController::class,'transaction_edit']);
+    Route::delete('work.delete/{id}', [adminController::class,'work_delete']);
+    Route::delete('ask.delete/{id}', [adminController::class,'ask_delete']);
+    Route::delete('payment.delete/{id}', [adminController::class,'payment_delete']);
+    Route::delete('unlock.delete/{id}', [adminController::class,'unlock_delete']);
+    Route::match(['put', 'patch'],'vip.edit/{id}', [adminController::class,'vip_edit']);
+    Route::match(['put', 'patch'],'work.edit/{id}', [adminController::class,'work_edit']);
+    Route::match(['put', 'patch'],'ask.edit/{id}', [adminController::class,'ask_edit']);
+    Route::match(['put', 'patch'],'payment.edit/{id}', [adminController::class,'payment_edit']);
+    Route::match(['put', 'patch'],'transaction.edit/{id}', [adminController::class,'transaction_edit']);
   
 
 });

@@ -15,6 +15,7 @@ class forgetEmail extends Mailable
     public $forgetCode;
     public $title;
     public $btn;
+    public $sub;
 
     /**
      * Create a new message instance.
@@ -22,11 +23,12 @@ class forgetEmail extends Mailable
      * @param int $forgetCode
      * @return void
      */
-    public function __construct($forgetCode ,$title,$btn)
+    public function __construct($forgetCode ,$title,$btn ,$sub)
     {
         $this->forgetCode = $forgetCode;
         $this->title = $title;
         $this->btn = $btn;
+        $this->sub = $sub;
     }
     public function content()
     {
@@ -44,7 +46,7 @@ class forgetEmail extends Mailable
     {
         return $this->from('hazratbd80@gmail.com') // Set the sender's email address
                     ->view('emails.forget_plain') // Change 'view.name' to the actual Blade view name
-                    ->subject('Forget Email');
+                    ->subject($this->sub);
 
        
     }

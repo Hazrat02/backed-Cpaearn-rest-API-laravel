@@ -43,6 +43,17 @@ class FrontendController extends Controller
         ]);
 
         $method=payment::where('id',$request->method)->get()->first();
+        $user=User::find(auth()->user()->id);
+        if ($request->type=='withdraw') {
+            $user->update(
+                [
+                    'main_balance' =>$user->main_balance-$request->price,
+                    
+    
+                ]
+            );
+        }
+        
         $deposit = transaction::create([
             'status' =>'pending',
             'user_id' => auth()->user()->id,

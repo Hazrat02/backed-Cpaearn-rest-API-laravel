@@ -11,6 +11,7 @@ use App\Models\payment;
 use App\Models\transaction;
 use App\Models\ask;
 use App\Models\vip;
+use App\Models\vipunlock;
 use App\Models\work;
 use PhpParser\Node\Stmt\Return_;
 
@@ -96,6 +97,42 @@ class adminController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Vip plan created successfully',
+           
+        ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'error' => 'Sorry!You are not admin',
+               
+            ]);
+        }
+       
+    }
+    public function vipunlock_store(Request $request)
+    {
+
+        $request->validate([
+            'vip_id' => 'required||max:255',
+            'limit' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            
+           
+        ]);
+        if (auth()->user()->role === '0') {
+           
+        $unlock = vipunlock::create([
+            'vip_id' => $request->vip_id,
+            'limit' => $request->limit,
+            'type' => $request->type,
+            
+            
+        ]);
+        
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Vip Label created successfully',
+            'label'=>$unlock
            
         ]);
         } else {
@@ -202,6 +239,17 @@ class adminController extends Controller
 
         ]);
     }
+    public function unlock_delete(Request $request)
+    {
+        $id=$request->id;
+        $res = vipunlock::find($id)->delete();
+     
+        return response()->json([
+            'message'=>'Vip label delete done!',
+          
+
+        ]);
+    }
     public function vip_delete(Request $request)
     {
         $id=$request->id;
@@ -281,9 +329,11 @@ class adminController extends Controller
             [
                 'name' => $request->name,
                 'description' => $request->description,
-                'vip_id' => $vip_id,
-                'icon' => $request->icon,
                 'earn' => $request->earn,
+                'vip_id' => $request->vip_id,
+                'component' => $request->component,
+               'icon'=>$request->icon,
+
              
 
             ]
@@ -304,12 +354,9 @@ class adminController extends Controller
         // dd($user);
         $ask->update(
             [
-                'name' => $request->name,
-                'description' => $request->description,
-                'vip_id' => $vip_id,
-                'icon' => $request->icon,
-                'earn' => $request->earn,
-             
+                'ask' => $request->ask,
+                'ans' => $request->ans,
+               
 
             ]
         );
@@ -330,10 +377,10 @@ class adminController extends Controller
         $payment->update(
             [
                 'name' => $request->name,
-                'description' => $request->description,
-                'vip_id' => $vip_id,
-                'icon' => $request->icon,
-                'earn' => $request->earn,
+                'method' => $request->method,
+                'network' => $request->network,
+                'image' => $request->image,
+                'address' => $request->address,
              
 
             ]
@@ -350,26 +397,64 @@ class adminController extends Controller
         $id=$request->id;
         
         $transaction = transaction::find($id);
-        // dd($user);
-        $transaction->update(
-            [
-                'status' =>'pending',
-                'user_id' => auth()->user()->id,
-                'method' => $request->method,
-                'type' => $request->type,
+        $user=User::find($transaction->user_id);
+        if ($request->status=='success') {
+           
+            if ($transaction->type=='deposit') {
+                $user->update(
+                    [
+                        'main_balance' =>$user->main_balance+$transaction->price,
+                        
+        
+                    ]
+                );
+            }
+            
+            $transaction->update(
+                [
+                    'status' =>'success',
+                    
     
-                'network' => $request->network,
-                'price' => $request->price,
-                'trxid' => $request->trxid,
-    
-                'address' => $request->address,
+                ]
+            );
+        }else{
 
-            ]
-        );
+            if ($transaction->type=='deposit') {
+                $transaction->update(
+                    [
+                        'status' =>'rejected',
+                        
+        
+                    ]
+
+                );
+            } else {
+
+                $transaction->update(
+                    [
+                        'status' =>'rejected',
+                        
+        
+                    ]
+                );
+                $user->update(
+                    [
+                        'main_balance' =>$user->main_balance+$transaction->price,
+                        
+        
+                    ]
+                );
+            }
+            
+
+
+        }
+        // dd($user);
+       
      
         return response()->json([
             'message'=>'Transaction update done!',
-            'transaction'=>$transaction
+            
 
         ]);
     }

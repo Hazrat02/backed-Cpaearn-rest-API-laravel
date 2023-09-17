@@ -30,7 +30,8 @@ class work extends Authenticatable implements JWTSubject
         'vip_id',
         'description',
         'earn',
-        'icon'
+        'icon',
+        'component'
 
 
     ];

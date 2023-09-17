@@ -15,7 +15,7 @@
           <!-- Logo -->
           <img src="https://static.vecteezy.com/system/resources/previews/023/179/015/original/cpa-letter-logo-design-in-illustration-logo-calligraphy-designs-for-logo-poster-invitation-etc-vector.jpg" alt="Logo" style="max-width: 100px; height: 100px;">
           <h1 style="color: #333333;">{{$title}}</h1>
-          <p style="color: #666666;">Your Forget code is:<b>{{$forgetCode}}</b>. </p>
+          <p style="color: #666666;">Your target code is:<b>{{$forgetCode}}</b>. </p>
           <p style="color: #666666;">Do not Share your secret code.</p>
 
           @if ($btn)
