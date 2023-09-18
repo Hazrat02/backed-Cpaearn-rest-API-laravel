@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\payment;
 use App\Mail\forgetEmail;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Http\UploadedFile;
 class AuthController extends Controller
 {
     /**
@@ -57,16 +57,33 @@ class AuthController extends Controller
     }
 
     public function register(Request $request){
+      
+    
+       
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
+        if ($request->hasFile('profile')) {
+            $file = $request->file('profile');
+        
+        
+        $name =rand(0000000,999999) .$file->getClientOriginalName();
+        $file->move(public_path('img/profile'), $name);
+        $path=asset('img/profile/');
+       $url= $path.'/'.$name;
+       
+        }else{
+            $url='';
+           
 
+        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'profile'=>$url
         ]);
 
         $token = Auth::login($user);
