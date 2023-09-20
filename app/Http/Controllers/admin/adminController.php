@@ -38,21 +38,30 @@ class adminController extends Controller
             
            
         ]);
-        // $file = $request->$file['image'];
-        
-        
-        // $name =rand(0000000,999999) .$file->getClientOriginalName();
-        // $file->move(public_path('payment'), $name);
-       $name='sfsdfsfsdf';
+      
+       
     
         if (auth()->user()->role === '0') {
-             
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+            
+            
+            $name =rand(0000000,999999) .$file->getClientOriginalName();
+            $file->move(public_path('img/method'), $name);
+            $path=asset('img/method/');
+           $url= $path.'/'.$name;
+           
+            }else{
+                $url='';
+               
+    
+            }
             $payment = payment::create([
                 'name' => $request->name,
                 'method' => $request->method,
                 'network' => $request->network,
                 'address' => $request->method,
-                'image' => $name,
+                'image' => $url,
                
                 
             ]);
@@ -61,12 +70,13 @@ class adminController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Method created successfully',
+                'payment'=>$payment
                
             ]);
             } else {
                 return response()->json([
                     'status' => 'error',
-                    'error' => 'Sorry!You are not admin',
+                    'message' => 'Sorry!You are not admin',
                    
                 ]);
             }
@@ -83,7 +93,7 @@ class adminController extends Controller
         ]);
         if (auth()->user()->role === '0') {
            
-        $payment = vip::create([
+        $vip = vip::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
@@ -97,14 +107,14 @@ class adminController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Vip plan created successfully',
+            'vip'=>$vip
            
         ]);
         } else {
             return response()->json([
                 'status' => 'error',
-                'error' => 'Sorry!You are not admin',
-               
-            ]);
+                'message' => 'Sorry!You are not admin',
+                        ]);
         }
        
     }
@@ -158,7 +168,7 @@ class adminController extends Controller
         $vip_id='4';
         if (auth()->user()->role === '0') {
            
-        $payment = work::create([
+        $work = work::create([
             'name' => $request->name,
             'description' => $request->description,
             'vip_id' => $vip_id,
@@ -171,6 +181,7 @@ class adminController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'work'=>$work,
             'message' => 'Work created successfully',
            
         ]);

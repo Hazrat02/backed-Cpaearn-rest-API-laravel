@@ -26,7 +26,7 @@ class FrontendController extends Controller
     }
     public function payment_method()
     {
-        $payment = payment::get()->all();
+        $payment = payment::orderBy('id', 'desc')->get()->all();
         // return response()->json(['user' => $user]);
         return response()->json([
             'status' => 'success',
